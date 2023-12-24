@@ -28,36 +28,59 @@ export default function Home() {
   const [postId, setPostId] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const response = await axios.get("/api/posts/getposts");
-  //       setPosts(response.data.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [post]);
-
   useEffect(() => {
-    axios
-      .get("/api/posts/getposts")
-      .then((response) => {
-        console.log(response?.data);
-
+    const fetchData = async () => {
+      try {
+        // setLoading(true);
+        const response = await axios.get("/api/posts/getposts");
         setPosts(response?.data?.data);
-
-        console.log(posts);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.log(error);
-      });
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [post]);
+
+
+
+  const handleAddPost = async () => {
+    if (validateInputs()) {
+      try {
+        setLoading(true);
+        console.log("done");
+        const response = await axios.post("/api/posts/addpost", post);
+
+        console.log("post added", response?.data);
+        setPost(response?.data);
+        setPost({ title: "", description: "" });
+
+      } catch (error) {
+        console.log("post error", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+
+
+  // useEffect(() => {
+  //   axios
+  //     .get("/api/posts/getposts")
+  //     .then((response) => {
+  //       console.log(response?.data);
+
+  //       setPosts(response?.data?.data);
+
+  //       console.log(posts);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, [post]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -85,32 +108,7 @@ export default function Home() {
   };
 
 
-  const handleAddPost = async () => {
-    // e.preventDefault();
-
-    // if (!post.title && !post.description) return;
-
-    if (validateInputs()) {
-
-
-      try {
-        setLoading(true);
-        console.log("done");
-        const response = await axios.post("/api/posts/addpost", post);
-
-        console.log("post added", response?.data);
-        setPost(response?.data);
-        setPost({ title: "", description: "" });
-
-      } catch (error) {
-        console.log("post error", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
-
-
+  
 
   const EditPost = (id, title, description) => {
     setPostId(id);
