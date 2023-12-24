@@ -1,9 +1,11 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 
 import axios from "axios";
+import useSWR from 'swr';
+
 
 import Post from "@/components/Post";
 import Form from "@/components/Form";
@@ -28,21 +30,43 @@ export default function Home() {
   const [postId, setPostId] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // setLoading(true);
-        const response = await axios.get("api/posts/getposts");
-        setPosts(response?.data?.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        // setLoading(false);
-      }
-    };
 
-    fetchData();
-  }, [post]);
+  
+
+    
+  
+
+ 
+ 
+
+ 
+
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // setLoading(true);
+  //       const response = await axios.get("api/posts/getposts");
+  //       setPosts(response?.data?.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     } finally {
+  //       // setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [post]);
+
+
+  useEffect(() => {
+    fetch('/api/posts/getposts')
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data?.data);
+        setLoading(false)
+      })
+  }, [post])
 
 
  

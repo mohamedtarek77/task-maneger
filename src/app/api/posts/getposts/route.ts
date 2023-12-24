@@ -1,4 +1,4 @@
-import { connect } from "@/dpConfig/dpConfig"; 
+import { connect } from "@/dpConfig/dpConfig"; // Import your MongoDB connection function
 
 import Post from "@/models/posts";
 
