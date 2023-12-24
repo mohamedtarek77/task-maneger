@@ -131,7 +131,7 @@ export default function Home() {
 
 
         <>
-          {/* <div className="flex flex-wrap">
+          <div className="flex flex-wrap">
           {
           
 
@@ -147,10 +147,10 @@ export default function Home() {
               setPostId={setPostId}
             />
           ))}
-        </div> */}
- <div className="flex flex-wrap">
+        </div>
+ {/* <div className="flex flex-wrap">
 <AllTasks/>
-        </div> 
+        </div>  */}
         </>
       
 
