@@ -1,10 +1,40 @@
+"use client"
 
-import React from 'react'
+import React ,{useState} from 'react'
+
+import axios from "axios";
+
 
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 
 
-const Post = ({ post, EditPost, removePost }) => {
+
+const Post = ({ post,posts , setPostId ,setIsEdit,setPost,setPosts }) => {
+
+
+
+    const EditPost = (id, title, description) => {
+        setPostId(id);
+        setIsEdit(true);
+        setPost({ title, description });
+      };
+    
+    
+      const handleRemovePost = async (postId) => {
+        try {
+          await axios.delete('/api/posts/deletepost', {
+            data: { id: postId },
+          });
+          const updatedPosts = posts.filter((p) => p._id !== postId);
+          setPosts(updatedPosts);
+    
+        } catch (error) {
+          console.error('Error deleting post:', error);
+        }
+      };
+    
+
+
     return (
         <div key={post._id} className=" flex flex-col w-60  min-w-52  max-w-64 bg-gray-600  border border-black rounded-md m-2 p-2">
 
@@ -34,7 +64,7 @@ const Post = ({ post, EditPost, removePost }) => {
                 <button
                     className="  px-2 py-2 mx-2  mt-5 border border-black rounded-md w-16"
 
-                    onClick={() => removePost(post._id)}
+                    onClick={() => handleRemovePost(post._id)}
                 >
                     {/* Delete */}
 

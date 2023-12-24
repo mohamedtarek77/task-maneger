@@ -1,6 +1,76 @@
 import React from 'react'
 
-const Form = ({post,error,isEdit,handleInputChange,handleEditPost,handleAddPost}) => {
+import axios from "axios";
+
+
+const Form = ({post , posts,error,isEdit, setLoading ,setPost ,setError ,postId ,setPosts}) => {
+
+
+
+  const validateInputs = () => {
+    let isValid = true;
+    const newError = { ...error };
+
+    if (post.title.trim() === '') {
+      newError.title = 'Title is required';
+      isValid = false;
+    }
+
+    if (post.description.trim() === '') {
+      newError.description = 'Description is required';
+      isValid = false;
+    }
+
+    setError(newError);
+    return isValid;
+  };
+
+  const handleAddPost = async () => {
+    if (validateInputs()) {
+      try {
+        setLoading(true);
+        console.log("done");
+        const response = await axios.post("/api/posts/addpost", post);
+
+        console.log("post added", response?.data);
+        setPost(response?.data);
+        setPost({ title: "", description: "" });
+      } catch (error) {
+        console.log("post error", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setPost({ ...post, [name]: value });
+
+    setError({ ...error, [name]: '' });
+  };
+
+
+  const handleEditPost = async () => {
+    if (!post.title && !post.description) return;
+    try {
+      const response = await axios
+        .put("/api/posts/editpost", {
+          id: postId,
+          title: post?.title,
+          description: post?.description,
+        })
+      const updatedPosts = posts.map((p) => (p._id === postId ? response.data.data : p));
+      setPosts(updatedPosts);
+      setIsEdit(false);
+      setPost({ title: "", description: "" });
+    } catch (error) {
+      console.error("Error editing post:", error);
+    }
+  };
+
+
   return (
     <div
 

@@ -9,16 +9,25 @@ import useSWR from 'swr';
 
 import Post from "@/components/Post";
 import Form from "@/components/Form";
+import AllTasks from "@/components/AllTasks"
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
+
+async function getTasks() {
+  const res = await fetch("/api/posts/getposts")
+  return res.json()
+}
 
 
 export default function Home() {
 
   // const { data, error1 } = useSWR('/api/posts/getposts', fetcher)
 
+  // const tasks = await getTasks()
 
-  
+  // useEffect(()=>{
+  //   console.log(tasks)
+  // })
 
   const [post, setPost] = useState({
     title: "",
@@ -31,12 +40,11 @@ export default function Home() {
   });
 
   const [posts, setPosts] = useState([]);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [postId, setPostId] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
- 
+
 
 
   // useEffect(() => {
@@ -73,140 +81,33 @@ export default function Home() {
   // }, [post]);
 
 
-  useEffect(() => {
-    fetch('/api/posts/getposts')
-      .then((res) => res.json())
-      .then((data) => {
-        setPosts(data?.data);
-        setLoading(false)
-      })
-  }, [post])
-
-
-
-
-
-  const handleAddPost = async () => {
-    if (validateInputs()) {
-      try {
-        setLoading(true);
-        console.log("done");
-        const response = await axios.post("/api/posts/addpost", post);
-
-        console.log("post added", response?.data);
-        setPost(response?.data);
-        setPost({ title: "", description: "" });
-
-
-
-      } catch (error) {
-        console.log("post error", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
-
-
-
   // useEffect(() => {
-  //   axios
-  //     .get("/api/posts/getposts")
-  //     .then((response) => {
-  //       console.log(response?.data);
-
-  //       setPosts(response?.data?.data);
-
-  //       console.log(posts);
+  //   fetch('/api/posts/getposts')
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setPosts(data?.data);
+  //       setLoading(false)
   //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, [post]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setPost({ ...post, [name]: value });
-
-    setError({ ...error, [name]: '' });
-  };
-
-  const validateInputs = () => {
-    let isValid = true;
-    const newError = { ...error };
-
-    if (post.title.trim() === '') {
-      newError.title = 'Title is required';
-      isValid = false;
-    }
-
-    if (post.description.trim() === '') {
-      newError.description = 'Description is required';
-      isValid = false;
-    }
-
-    setError(newError);
-    return isValid;
-  };
+  // }, [post])
 
 
 
+  useEffect(() => {
+    axios
+      .get("/api/posts/getposts")
+      .then((response) => {
+        console.log(response?.data);
 
-  const EditPost = (id, title, description) => {
-    setPostId(id);
-    setIsEdit(true);
-    setPost({ title, description });
-  };
+        setPosts(response?.data?.data);
 
-  // const handleEditPost =    () => {
-  //   if (!post.title && !post.description) return;
-  //   axios
-  //     .put("/api/posts/editpost", {
-  //       id: postId,
-  //       title: post?.title,
-  //       description: post?.description,
-  //     })
-  //     .then((response) => {
-  //       const updatedPosts = posts.map((p) => (p._id === postId ? response.data.data : p));
-  //       setPosts(updatedPosts);
-  //       setIsEdit(false);
-  //       setPost({ title: "", description: "" });
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error editing post:", error);
-  //     });
-  // };
-
-  const handleEditPost = async () => {
-    if (!post.title && !post.description) return;
-    try {
-      const response = await axios
-        .put("/api/posts/editpost", {
-          id: postId,
-          title: post?.title,
-          description: post?.description,
-        })
-      const updatedPosts = posts.map((p) => (p._id === postId ? response.data.data : p));
-      setPosts(updatedPosts);
-      setIsEdit(false);
-      setPost({ title: "", description: "" });
-    } catch (error) {
-      console.error("Error editing post:", error);
-    }
-  };
-
-  const handleRemovePost = async (postId) => {
-    try {
-      await axios.delete('/api/posts/deletepost', {
-        data: { id: postId },
+        console.log(posts);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      const updatedPosts = posts.filter((p) => p._id !== postId);
-      setPosts(updatedPosts);
+  }, [post]);
 
-    } catch (error) {
-      console.error('Error deleting post:', error);
-    }
-  };
+  
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-800 w-full border border-gray-300 border-2  ">
@@ -214,9 +115,12 @@ export default function Home() {
         isEdit={isEdit}
         post={post}
         error={error}
-        handleInputChange={handleInputChange}
-        handleEditPost={handleEditPost}
-        handleAddPost={handleAddPost}
+        posts={posts} 
+        setLoading={setLoading} 
+        setPost={setPost} 
+        setError={setError} 
+        postId={postId} 
+        setPosts={setPosts}
       />
 
       <h1 className="text-xl text-extrabold text-white m-5">Tasks</h1>
@@ -224,16 +128,34 @@ export default function Home() {
       {loading ? (
         <div className="text-white">Loading...</div>
       ) : (
-        <div className="flex flex-wrap">
-          {posts?.map((post) => (
+
+
+        <>
+          <div className="flex flex-wrap">
+          {
+          
+
+          
+          posts?.map((post) => (
             <Post
               key={post._id}
               post={post}
-              EditPost={EditPost}
-              removePost={handleRemovePost}
+              posts={posts}
+              setIsEdit={setIsEdit}
+              setPost={setPost}
+              setPosts={setPosts}
+              setPostId={setPostId}
             />
           ))}
         </div>
+
+        {/* <div className="flex flex-wrap">
+<AllTasks/>
+        </div> */}
+        </>
+      
+
+        
       )}
     </main>
 
