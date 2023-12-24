@@ -32,7 +32,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         // setLoading(true);
-        const response = await axios.get("/api/posts/getposts");
+        const response = await axios.get("api/posts/getposts");
         setPosts(response?.data?.data);
       } catch (error) {
         console.log(error);
@@ -45,6 +45,8 @@ export default function Home() {
   }, [post]);
 
 
+ 
+
 
   const handleAddPost = async () => {
     if (validateInputs()) {
@@ -56,6 +58,8 @@ export default function Home() {
         console.log("post added", response?.data);
         setPost(response?.data);
         setPost({ title: "", description: "" });
+
+       
 
       } catch (error) {
         console.log("post error", error);
