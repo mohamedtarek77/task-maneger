@@ -4,7 +4,9 @@ import Post from "./Post"
 
 async function getData (){
     // const res = await fetch ("process.env.NEXT_PUBLIC_MONGODB_URI!")
-    const res = await fetch ("http://localhost:3000/api/posts/getposts",{cashe:"no-store"});
+    // const res = await fetch ("http://localhost:3000/api/posts/getposts",{cashe:"no-store"});
+    const res = await fetch ("https://tasksmanger.vercel.app/api/posts/getposts",{cashe:"no-store"});
+
     if(!res.ok) return notFound();
     return res.json();
 
