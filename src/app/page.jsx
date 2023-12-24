@@ -10,9 +10,15 @@ import useSWR from 'swr';
 import Post from "@/components/Post";
 import Form from "@/components/Form";
 
+const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 
 export default function Home() {
+
+  // const { data, error1 } = useSWR('/api/posts/getposts', fetcher)
+
+
+  
 
   const [post, setPost] = useState({
     title: "",
@@ -30,16 +36,24 @@ export default function Home() {
   const [postId, setPostId] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
-
-  
-
-    
-  
-
- 
  
 
- 
+
+  // useEffect(() => {
+  //   console.log('1')
+  //   console.log(data)
+  //   console.log(data?.data)
+
+
+  //   console.log('2')
+
+  //   try {
+  //     setPosts(data?.data);
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+
+  // }, [post])
 
 
   // useEffect(() => {
@@ -69,7 +83,7 @@ export default function Home() {
   }, [post])
 
 
- 
+
 
 
   const handleAddPost = async () => {
@@ -83,7 +97,7 @@ export default function Home() {
         setPost(response?.data);
         setPost({ title: "", description: "" });
 
-       
+
 
       } catch (error) {
         console.log("post error", error);
@@ -136,7 +150,7 @@ export default function Home() {
   };
 
 
-  
+
 
   const EditPost = (id, title, description) => {
     setPostId(id);
@@ -166,16 +180,16 @@ export default function Home() {
   const handleEditPost = async () => {
     if (!post.title && !post.description) return;
     try {
-      const response= await axios
+      const response = await axios
         .put("/api/posts/editpost", {
           id: postId,
           title: post?.title,
           description: post?.description,
         })
-          const updatedPosts = posts.map((p) => (p._id === postId ? response.data.data : p));
-          setPosts(updatedPosts);
-          setIsEdit(false);
-          setPost({ title: "", description: "" });
+      const updatedPosts = posts.map((p) => (p._id === postId ? response.data.data : p));
+      setPosts(updatedPosts);
+      setIsEdit(false);
+      setPost({ title: "", description: "" });
     } catch (error) {
       console.error("Error editing post:", error);
     }
@@ -211,7 +225,7 @@ export default function Home() {
         <div className="text-white">Loading...</div>
       ) : (
         <div className="flex flex-wrap">
-          {posts.map((post) => (
+          {posts?.map((post) => (
             <Post
               key={post._id}
               post={post}
