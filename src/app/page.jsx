@@ -28,36 +28,36 @@ export default function Home() {
   const [postId, setPostId] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get("/api/posts/getposts");
-        setPosts(response.data.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [post]);
-
   // useEffect(() => {
-  //   axios
-  //     .get("/api/posts/getposts")
-  //     .then((response) => {
-  //       console.log(response.data);
-
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await axios.get("/api/posts/getposts");
   //       setPosts(response.data.data);
-
-  //       console.log(posts);
-  //     })
-  //     .catch((error) => {
+  //     } catch (error) {
   //       console.log(error);
-  //     });
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
   // }, [post]);
+
+  useEffect(() => {
+    axios
+      .get("/api/posts/getposts")
+      .then((response) => {
+        console.log(response?.data);
+
+        setPosts(response?.data?.data);
+
+        console.log(posts);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [post]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
