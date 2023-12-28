@@ -1,33 +1,55 @@
 
 "use client";
 
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect,  } from "react";
 
 import axios from "axios";
-import useSWR from 'swr';
 
 
 import Post from "@/components/Post";
 import Form from "@/components/Form";
-import AllTasks from "@/components/AllTasks"
-
-const fetcher = (...args) => fetch(...args).then((res) => res.json())
-
-async function getTasks() {
-  const res = await fetch("/api/posts/getposts")
-  return res.json()
-}
 
 
-export default function Home() {
 
-  // const { data, error1 } = useSWR('/api/posts/getposts', fetcher)
+// async function getData() {
+//   try {
 
-  // const tasks = await getTasks()
+//     // const res = await fetch("http://localhost:3000/api/posts/getposts" ,  {next: { revalidate: 10 },});
 
-  // useEffect(()=>{
-  //   console.log(tasks)
-  // })
+//     const res = await fetch("http://localhost:3000/api/posts/getposts" ,  { cache: 'no-store' });
+
+
+//     // const res = await fetch("https://deluxe-croquembouche-fbf0df.netlify.app/api/posts/getposts" , 
+    
+//     // // {next: { revalidate: 10 },}
+//     // { cache: 'no-store' }
+    
+//     // );
+
+
+   
+
+//     if (!res.ok) {
+//       throw new Error("Failed to fetch data");
+//     }
+
+//     return res.json();
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     return null;
+//   }
+// }
+
+
+
+
+
+export default   function Home() {
+
+
+  // const data = await getData()
+  // console.log(data)
+
 
   const [post, setPost] = useState({
     title: "",
@@ -40,6 +62,7 @@ export default function Home() {
   });
 
   const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState(data?.data);
   const [loading, setLoading] = useState(false);
   const [postId, setPostId] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
@@ -47,48 +70,6 @@ export default function Home() {
 
 
 
-  // useEffect(() => {
-  //   console.log('1')
-  //   console.log(data)
-  //   console.log(data?.data)
-
-
-  //   console.log('2')
-
-  //   try {
-  //     setPosts(data?.data);
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-
-  // }, [post])
-
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // setLoading(true);
-  //       const response = await axios.get("api/posts/getposts");
-  //       setPosts(response?.data?.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     } finally {
-  //       // setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [post]);
-
-
-  // useEffect(() => {
-  //   fetch('/api/posts/getposts')
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setPosts(data?.data);
-  //       setLoading(false)
-  //     })
-  // }, [post])
 
 
 
@@ -148,9 +129,7 @@ export default function Home() {
             />
           ))}
         </div>
- {/* <div className="flex flex-wrap">
-<AllTasks/>
-        </div>  */}
+
         </>
       
 
