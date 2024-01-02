@@ -3,7 +3,7 @@ import React from 'react'
 import axios from "axios";
 
 
-const Form = ({post , posts,error,isEdit, setLoading ,setPost ,setError ,postId ,setPosts}) => {
+const Form = ({post , posts,error,isEdit, setLoading ,setPost ,setError ,postId ,setPosts ,setIsEdit}) => {
 
 
 
@@ -34,7 +34,7 @@ const Form = ({post , posts,error,isEdit, setLoading ,setPost ,setError ,postId 
 
         console.log("post added", response?.data);
         setPost(response?.data);
-        setPost({ title: "", description: "" });
+        setPost( (prev)=>( {...prev, title: "", description: "" } ) );
       } catch (error) {
         console.log("post error", error);
       } finally {
@@ -48,7 +48,7 @@ const Form = ({post , posts,error,isEdit, setLoading ,setPost ,setError ,postId 
     const { name, value } = e.target;
     setPost({ ...post, [name]: value });
 
-    setError({ ...error, [name]: '' });
+    // setError({ ...error, [name]: '' });
   };
 
 
@@ -63,8 +63,17 @@ const Form = ({post , posts,error,isEdit, setLoading ,setPost ,setError ,postId 
         })
       const updatedPosts = posts.map((p) => (p._id === postId ? response.data.data : p));
       setPosts(updatedPosts);
+      setPost( (prev)=>( {...prev, title: "", description: "" } ) );
+
       setIsEdit(false);
-      setPost({ title: "", description: "" });
+
+      // setPost((prevPost) => ({ ...prevPost, title: "", description: "" }));
+
+
+
+
+      // setPost({ title: "", description: "" });
+
     } catch (error) {
       console.error("Error editing post:", error);
     }

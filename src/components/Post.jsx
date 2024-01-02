@@ -8,6 +8,8 @@ const EditPost = (id, title, description) => {
         setPostId(id);
         setIsEdit(true);
         setPost({ title, description });
+
+
     };
     const handleRemovePost = async (postId) => {
         try {
