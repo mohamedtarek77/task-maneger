@@ -105,7 +105,7 @@ const Form = ({post , posts,error,isEdit, setLoading ,setPost ,setError ,postId 
       className="p-1 m-2 bg-gray-900 text-white border border-gray-300 border-2 rounded-md  h-10 flex flex-col items-center text-center "
       onClick={isEdit ? handleEditPost : handleAddPost}
     >
-      {isEdit ? "Edit Post" : "Add New Post"}
+      {isEdit ? "Edit the task" : "Add New Task"}
     </button>
 
 
